@@ -69,6 +69,11 @@
             font-size: 16px;
         }
 
+        .upload-btn:disabled {
+            background: #86868b;
+            cursor: not-allowed;
+        }
+
         .progress-container {
             display: none;
             margin-top: 1.5rem;
@@ -96,6 +101,7 @@
             color: #86868b;
         }
 
+        /* Upload warning */
         .upload-warning {
             display: none;
             margin-top: 1rem;
@@ -121,9 +127,7 @@
             line-height: 1.2;
         }
 
-        .upload-warning .warn-text {
-            line-height: 1.5;
-        }
+        .upload-warning .warn-text { line-height: 1.5; }
 
         .upload-warning .warn-text small {
             display: block;
@@ -135,12 +139,240 @@
 
         @keyframes pulse-border {
             0%, 100% { box-shadow: 0 0 0 0 rgba(230, 57, 70, 0.5); }
-            50% { box-shadow: 0 0 0 6px rgba(230, 57, 70, 0); }
+            50%       { box-shadow: 0 0 0 6px rgba(230, 57, 70, 0); }
         }
 
-        .upload-btn:disabled {
+        /* Error section */
+        .error-section {
+            margin-top: 1rem;
+            background: #fff5f5;
+            border: 1px solid #ffcdd2;
+            border-radius: 12px;
+            padding: 1rem;
+            text-align: left;
+        }
+
+        .error-summary {
+            color: #c62828;
+            font-size: 13px;
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+        }
+
+        .error-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid #ffcdd2;
+            gap: 8px;
+        }
+
+        .error-item:last-child {
+            border-bottom: none;
+            padding-bottom: 0;
+        }
+
+        .error-file-name {
+            font-size: 13px;
+            color: #333;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            flex: 1;
+        }
+
+        .retry-btn {
+            background: #e63946;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 6px 12px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            flex-shrink: 0;
+        }
+
+        .retry-btn:disabled {
             background: #86868b;
             cursor: not-allowed;
+        }
+
+        /* Bottom sheet */
+        .sheet-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 100;
+            display: flex;
+            align-items: flex-end;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+
+        .sheet-overlay.visible {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .bottom-sheet {
+            background: white;
+            border-radius: 20px 20px 0 0;
+            padding: 1.5rem 1.5rem 2.5rem;
+            width: 100%;
+            transform: translateY(100%);
+            transition: transform 0.3s ease;
+            text-align: left;
+        }
+
+        .sheet-overlay.visible .bottom-sheet {
+            transform: translateY(0);
+        }
+
+        .sheet-handle {
+            width: 40px;
+            height: 4px;
+            background: #d2d2d7;
+            border-radius: 99px;
+            margin: 0 auto 1.25rem;
+        }
+
+        .sheet-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: #1d1d1f;
+            margin-bottom: 0.4rem;
+        }
+
+        .sheet-subtitle {
+            font-size: 0.85rem;
+            color: #86868b;
+            margin-bottom: 1rem;
+        }
+
+        .oversized-list {
+            list-style: none;
+            margin-bottom: 1.25rem;
+            border: 1px solid #e5e5e7;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .oversized-list li {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 12px;
+            border-bottom: 1px solid #e5e5e7;
+            font-size: 13px;
+        }
+
+        .oversized-list li:last-child { border-bottom: none; }
+
+        .file-name-text {
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            color: #1d1d1f;
+            flex: 1;
+            margin-right: 8px;
+        }
+
+        .file-size-badge {
+            background: #ffe5e5;
+            color: #c62828;
+            font-size: 11px;
+            font-weight: 600;
+            border-radius: 6px;
+            padding: 2px 7px;
+            flex-shrink: 0;
+        }
+
+        .sheet-btn-primary {
+            background: #000;
+            color: white;
+            border: none;
+            padding: 14px;
+            border-radius: 12px;
+            font-weight: 600;
+            width: 100%;
+            font-size: 15px;
+            cursor: pointer;
+            margin-bottom: 10px;
+        }
+
+        .sheet-btn-secondary {
+            background: #f5f5f7;
+            color: #1d1d1f;
+            border: none;
+            padding: 14px;
+            border-radius: 12px;
+            font-weight: 600;
+            width: 100%;
+            font-size: 15px;
+            cursor: pointer;
+        }
+
+        /* Thank you card */
+        .thank-you-card {
+            text-align: center;
+            padding: 1rem 0;
+            animation: fade-in 0.5s ease;
+        }
+
+        @keyframes fade-in {
+            from { opacity: 0; transform: translateY(10px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        .checkmark-circle {
+            width: 80px;
+            height: 80px;
+            background: #34c759;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 38px;
+            color: white;
+            margin: 0 auto 1.5rem;
+            animation: pop-in 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        @keyframes pop-in {
+            0%   { transform: scale(0); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        .thank-you-name {
+            font-size: 1.6rem;
+            color: #1d1d1f;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .thank-you-count {
+            color: #86868b;
+            font-size: 0.95rem;
+        }
+
+        .thank-note {
+            color: #86868b;
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
+        }
+
+        #confettiCanvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 9999;
+            display: none;
         }
     </style>
 </head>
@@ -149,34 +381,67 @@
     <img class="hero" src="nisanfoto.jpeg" alt="Güliz & İlkay">
 
     <div class="form-card">
-        <h2>Güliz & İlkay</h2>
-        <p class="subtitle">Bu güzel günden kareleri bizimle paylaşın.</p>
+        <div id="uploadForm">
+            <h2>Güliz & İlkay</h2>
+            <p class="subtitle">Bu güzel günden kareleri bizimle paylaşın.</p>
 
-        <input type="text" id="guestName" placeholder="Adınız Soyadınız">
-        <input type="file" id="fileInput" multiple accept="image/*,video/*" style="display:none">
-        <button class="upload-btn" onclick="document.getElementById('fileInput').click()">Fotoğraf / Video Seç</button>
+            <input type="text" id="guestName" placeholder="Adınız Soyadınız">
+            <input type="file" id="fileInput" multiple accept="image/*,video/*" style="display:none">
+            <button class="upload-btn" onclick="document.getElementById('fileInput').click()">Fotoğraf / Video Seç</button>
 
-        <div class="progress-container" id="progressContainer">
-            <div class="progress-track">
-                <div class="progress-fill" id="progressFill"></div>
+            <div class="progress-container" id="progressContainer">
+                <div class="progress-track">
+                    <div class="progress-fill" id="progressFill"></div>
+                </div>
+                <p id="status">Hazırlanıyor...</p>
             </div>
-            <p id="status">Hazırlanıyor...</p>
+
+            <div class="upload-warning" id="uploadWarning">
+                <span class="warn-icon">⚠️</span>
+                <div class="warn-text">
+                    Yükleme devam ediyor — lütfen sayfayı kapatmayın!
+                    <small>Sayfayı kapatırsanız yükleme yarıda kesilir ve fotoğraflar kaybolabilir.</small>
+                </div>
+            </div>
+
+            <div class="error-section" id="errorSection" style="display:none">
+                <p class="error-summary" id="errorSummary"></p>
+                <div id="errorList"></div>
+            </div>
         </div>
 
-        <div class="upload-warning" id="uploadWarning">
-            <span class="warn-icon">⚠️</span>
-            <div class="warn-text">
-                Yükleme devam ediyor — lütfen sayfayı kapatmayın!
-                <small>Sayfayı kapatırsanız yükleme yarıda kesilir ve fotoğraflar kaybolabilir.</small>
-            </div>
+        <div class="thank-you-card" id="thankYouCard" style="display:none">
+            <div class="checkmark-circle">✓</div>
+            <p class="thank-you-name" id="thankYouName"></p>
+            <p class="thank-you-count" id="thankYouCount"></p>
+            <p class="thank-note">Anıların için çok teşekkürler 💛</p>
         </div>
     </div>
+
+    <!-- Large file bottom sheet -->
+    <div class="sheet-overlay" id="sheetOverlay">
+        <div class="bottom-sheet">
+            <div class="sheet-handle"></div>
+            <p class="sheet-title">Bazı dosyalar çok büyük</p>
+            <p class="sheet-subtitle">Aşağıdaki dosyalar 150 MB'ı aşıyor ve yüklenemeyebilir:</p>
+            <ul class="oversized-list" id="oversizedList"></ul>
+            <button class="sheet-btn-primary" id="removeAndContinueBtn">Büyük dosyaları kaldır, devam et</button>
+            <button class="sheet-btn-secondary" id="uploadAnywayBtn">Yine de yükle</button>
+        </div>
+    </div>
+
+    <canvas id="confettiCanvas"></canvas>
 
     <script>
         const CLOUD_NAME = "dxu72h68n";
         const UPLOAD_PRESET = "nisan_galeri";
+        const MAX_FILE_MB = 150;
 
         let isUploading = false;
+        let _failedFiles = [];
+        let _retryName = '';
+        let _successCount = 0;
+        let _totalCount = 0;
 
         window.addEventListener('beforeunload', (e) => {
             if (!isUploading) return;
@@ -184,11 +449,53 @@
             e.returnValue = '';
         });
 
-        document.getElementById('fileInput').onchange = async function () {
+        document.getElementById('fileInput').onchange = function () {
             const name = document.getElementById('guestName').value.trim();
             if (!name) { alert("Lütfen önce adınızı yazın."); this.value = ""; return; }
 
-            const files = this.files;
+            const files = Array.from(this.files);
+            const oversized = files.filter(f => f.size > MAX_FILE_MB * 1024 * 1024);
+
+            if (oversized.length > 0) {
+                showSizeWarning(oversized, files, name);
+            } else {
+                startUpload(files, name);
+            }
+        };
+
+        function showSizeWarning(oversized, allFiles, name) {
+            const list = document.getElementById('oversizedList');
+            list.innerHTML = oversized.map(f =>
+                `<li>
+                    <span class="file-name-text">${f.name}</span>
+                    <span class="file-size-badge">${(f.size / 1024 / 1024).toFixed(1)} MB</span>
+                </li>`
+            ).join('');
+
+            document.getElementById('sheetOverlay').classList.add('visible');
+
+            document.getElementById('removeAndContinueBtn').onclick = () => {
+                const filtered = allFiles.filter(f => f.size <= MAX_FILE_MB * 1024 * 1024);
+                closeSizeWarning();
+                if (filtered.length === 0) {
+                    alert("Seçilen tüm dosyalar çok büyük. Lütfen daha küçük dosyalar seçin.");
+                    document.getElementById('fileInput').value = "";
+                    return;
+                }
+                startUpload(filtered, name);
+            };
+
+            document.getElementById('uploadAnywayBtn').onclick = () => {
+                closeSizeWarning();
+                startUpload(allFiles, name);
+            };
+        }
+
+        function closeSizeWarning() {
+            document.getElementById('sheetOverlay').classList.remove('visible');
+        }
+
+        async function startUpload(files, name) {
             const container = document.getElementById('progressContainer');
             const fill = document.getElementById('progressFill');
             const status = document.getElementById('status');
@@ -198,50 +505,167 @@
 
             container.style.display = 'block';
             warning.classList.add('visible');
+            document.getElementById('errorSection').style.display = 'none';
             isUploading = true;
             btn.disabled = true;
             btn.innerText = 'Yükleniyor...';
             nameInput.disabled = true;
+            fill.style.width = '0%';
+
+            const failedFiles = [];
+            let successCount = 0;
 
             for (let i = 0; i < files.length; i++) {
-                const file = files[i];
                 status.innerText = `Yükleniyor: ${i + 1} / ${files.length}`;
-
-                const formData = new FormData();
-                formData.append('file', file);
-                formData.append('upload_preset', UPLOAD_PRESET);
-                formData.append('folder', `Nisan_Galeri/${name}`);
-                formData.append('context', `uploader=${name}`);
-
-                try {
-                    const xhr = new XMLHttpRequest();
-                    xhr.open('POST', `https://api.cloudinary.com/v1_1/${CLOUD_NAME}/upload`, true);
-
-                    xhr.upload.onprogress = (e) => {
-                        const fileProgress = Math.round((e.loaded / e.total) * 100);
-                        const overall = Math.round(((i + fileProgress / 100) / files.length) * 100);
-                        fill.style.width = overall + '%';
-                    };
-
-                    await new Promise((resolve, reject) => {
-                        xhr.onload = () => xhr.status === 200 ? resolve(JSON.parse(xhr.responseText)) : reject();
-                        xhr.onerror = () => reject();
-                        xhr.send(formData);
-                    });
-                } catch (err) {
-                    console.error("Yükleme hatası:", err);
-                }
+                const ok = await uploadFile(files[i], name, i, files.length, fill);
+                if (ok) { successCount++; } else { failedFiles.push(files[i]); }
             }
 
             isUploading = false;
             warning.classList.remove('visible');
-            btn.disabled = false;
-            btn.innerText = 'Fotoğraf / Video Seç';
-            nameInput.disabled = false;
-            fill.style.width = '100%';
-            status.innerText = "Tüm dosyalar başarıyla yüklendi! Teşekkürler ✨";
-            this.value = "";
-        };
+            document.getElementById('fileInput').value = "";
+
+            if (failedFiles.length > 0) {
+                btn.disabled = false;
+                btn.innerText = 'Fotoğraf / Video Seç';
+                nameInput.disabled = false;
+                fill.style.width = `${Math.round((successCount / files.length) * 100)}%`;
+                status.innerText = `${successCount} / ${files.length} dosya yüklendi.`;
+                showErrors(failedFiles, name, successCount, files.length);
+            } else {
+                fill.style.width = '100%';
+                showThankYou(name, successCount);
+            }
+        }
+
+        async function uploadFile(file, name, index, total, fill) {
+            const formData = new FormData();
+            formData.append('file', file);
+            formData.append('upload_preset', UPLOAD_PRESET);
+            formData.append('folder', `Nisan_Galeri/${name}`);
+            formData.append('context', `uploader=${name}`);
+
+            try {
+                const xhr = new XMLHttpRequest();
+                xhr.open('POST', `https://api.cloudinary.com/v1_1/${CLOUD_NAME}/upload`, true);
+                xhr.upload.onprogress = (e) => {
+                    const fp = Math.round((e.loaded / e.total) * 100);
+                    const overall = Math.round(((index + fp / 100) / total) * 100);
+                    fill.style.width = overall + '%';
+                };
+                await new Promise((resolve, reject) => {
+                    xhr.onload = () => xhr.status === 200 ? resolve() : reject();
+                    xhr.onerror = () => reject();
+                    xhr.send(formData);
+                });
+                return true;
+            } catch {
+                return false;
+            }
+        }
+
+        function showErrors(failedFiles, name, successCount, totalCount) {
+            _failedFiles = failedFiles.slice();
+            _retryName = name;
+            _successCount = successCount;
+            _totalCount = totalCount;
+
+            document.getElementById('errorSummary').innerText =
+                `${successCount} / ${totalCount} dosya yüklendi. ${failedFiles.length} dosya yüklenemedi:`;
+
+            document.getElementById('errorList').innerHTML = failedFiles.map((file, idx) =>
+                `<div class="error-item" id="error-item-${idx}">
+                    <span class="error-file-name">${file.name}</span>
+                    <button class="retry-btn" onclick="retryFile(${idx})">Tekrar Dene</button>
+                </div>`
+            ).join('');
+
+            document.getElementById('errorSection').style.display = 'block';
+        }
+
+        async function retryFile(idx) {
+            const file = _failedFiles[idx];
+            const btn = document.querySelector(`#error-item-${idx} .retry-btn`);
+            const fill = document.getElementById('progressFill');
+
+            btn.disabled = true;
+            btn.innerText = 'Yükleniyor...';
+
+            const ok = await uploadFile(file, _retryName, 0, 1, fill);
+
+            if (ok) {
+                _successCount++;
+                _failedFiles[idx] = null;
+                document.getElementById(`error-item-${idx}`).remove();
+
+                const remaining = _failedFiles.filter(f => f !== null);
+                if (remaining.length === 0) {
+                    document.getElementById('errorSection').style.display = 'none';
+                    showThankYou(_retryName, _successCount);
+                } else {
+                    document.getElementById('errorSummary').innerText =
+                        `${_successCount} / ${_totalCount} dosya yüklendi. ${remaining.length} dosya yüklenemedi:`;
+                }
+            } else {
+                btn.disabled = false;
+                btn.innerText = 'Tekrar Dene';
+            }
+        }
+
+        function showThankYou(name, count) {
+            document.getElementById('uploadForm').style.display = 'none';
+            document.getElementById('thankYouName').innerText = `Teşekkürler, ${name}! 🎉`;
+            document.getElementById('thankYouCount').innerText =
+                `${count} ${count === 1 ? 'dosya' : 'fotoğraf ve video'} başarıyla paylaşıldı.`;
+            document.getElementById('thankYouCard').style.display = 'block';
+            launchConfetti();
+        }
+
+        function launchConfetti() {
+            const canvas = document.getElementById('confettiCanvas');
+            canvas.style.display = 'block';
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            const ctx = canvas.getContext('2d');
+
+            const colors = ['#ff6b6b', '#feca57', '#48dbfb', '#ff9ff3', '#54a0ff', '#5f27cd', '#00d2d3', '#ff9f43'];
+            const pieces = Array.from({ length: 150 }, () => ({
+                x: Math.random() * canvas.width,
+                y: Math.random() * canvas.height - canvas.height,
+                w: Math.random() * 10 + 5,
+                h: Math.random() * 6 + 3,
+                color: colors[Math.floor(Math.random() * colors.length)],
+                rotation: Math.random() * Math.PI * 2,
+                speedX: Math.random() * 2 - 1,
+                speedY: Math.random() * 3 + 2,
+                rotationSpeed: (Math.random() - 0.5) * 0.2,
+            }));
+
+            let frame = 0;
+            function animate() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                pieces.forEach(p => {
+                    ctx.save();
+                    ctx.translate(p.x + p.w / 2, p.y + p.h / 2);
+                    ctx.rotate(p.rotation);
+                    ctx.fillStyle = p.color;
+                    ctx.fillRect(-p.w / 2, -p.h / 2, p.w, p.h);
+                    ctx.restore();
+                    p.x += p.speedX;
+                    p.y += p.speedY;
+                    p.rotation += p.rotationSpeed;
+                    if (p.y > canvas.height) { p.y = -p.h; p.x = Math.random() * canvas.width; }
+                });
+                frame++;
+                if (frame < 240) {
+                    requestAnimationFrame(animate);
+                } else {
+                    ctx.clearRect(0, 0, canvas.width, canvas.height);
+                    canvas.style.display = 'none';
+                }
+            }
+            animate();
+        }
     </script>
 </body>
 
