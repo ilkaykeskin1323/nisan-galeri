@@ -95,6 +95,53 @@
             font-size: 14px;
             color: #86868b;
         }
+
+        .upload-warning {
+            display: none;
+            margin-top: 1rem;
+            background: linear-gradient(135deg, #ff4e00, #e63946);
+            color: white;
+            border-radius: 12px;
+            padding: 14px 16px;
+            font-size: 14px;
+            font-weight: 600;
+            text-align: left;
+            gap: 10px;
+            align-items: flex-start;
+        }
+
+        .upload-warning.visible {
+            display: flex;
+            animation: pulse-border 2s ease-in-out infinite;
+        }
+
+        .upload-warning .warn-icon {
+            font-size: 20px;
+            flex-shrink: 0;
+            line-height: 1.2;
+        }
+
+        .upload-warning .warn-text {
+            line-height: 1.5;
+        }
+
+        .upload-warning .warn-text small {
+            display: block;
+            font-weight: 400;
+            opacity: 0.85;
+            margin-top: 2px;
+            font-size: 12px;
+        }
+
+        @keyframes pulse-border {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(230, 57, 70, 0.5); }
+            50% { box-shadow: 0 0 0 6px rgba(230, 57, 70, 0); }
+        }
+
+        .upload-btn:disabled {
+            background: #86868b;
+            cursor: not-allowed;
+        }
     </style>
 </head>
 
@@ -115,11 +162,27 @@
             </div>
             <p id="status">Hazırlanıyor...</p>
         </div>
+
+        <div class="upload-warning" id="uploadWarning">
+            <span class="warn-icon">⚠️</span>
+            <div class="warn-text">
+                Yükleme devam ediyor — lütfen sayfayı kapatmayın!
+                <small>Sayfayı kapatırsanız yükleme yarıda kesilir ve fotoğraflar kaybolabilir.</small>
+            </div>
+        </div>
     </div>
 
     <script>
         const CLOUD_NAME = "dxu72h68n";
         const UPLOAD_PRESET = "nisan_galeri";
+
+        let isUploading = false;
+
+        window.addEventListener('beforeunload', (e) => {
+            if (!isUploading) return;
+            e.preventDefault();
+            e.returnValue = '';
+        });
 
         document.getElementById('fileInput').onchange = async function () {
             const name = document.getElementById('guestName').value.trim();
@@ -129,8 +192,16 @@
             const container = document.getElementById('progressContainer');
             const fill = document.getElementById('progressFill');
             const status = document.getElementById('status');
+            const warning = document.getElementById('uploadWarning');
+            const btn = document.querySelector('.upload-btn');
+            const nameInput = document.getElementById('guestName');
 
             container.style.display = 'block';
+            warning.classList.add('visible');
+            isUploading = true;
+            btn.disabled = true;
+            btn.innerText = 'Yükleniyor...';
+            nameInput.disabled = true;
 
             for (let i = 0; i < files.length; i++) {
                 const file = files[i];
@@ -162,6 +233,11 @@
                 }
             }
 
+            isUploading = false;
+            warning.classList.remove('visible');
+            btn.disabled = false;
+            btn.innerText = 'Fotoğraf / Video Seç';
+            nameInput.disabled = false;
             fill.style.width = '100%';
             status.innerText = "Tüm dosyalar başarıyla yüklendi! Teşekkürler ✨";
             this.value = "";
