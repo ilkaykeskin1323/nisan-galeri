@@ -364,6 +364,18 @@
             margin-top: 0.5rem;
         }
 
+        .upload-again-btn {
+            margin-top: 1.75rem;
+            background: none;
+            border: 1.5px solid #d2d2d7;
+            color: #86868b;
+            padding: 10px 20px;
+            border-radius: 99px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+        }
+
         #confettiCanvas {
             position: fixed;
             top: 0;
@@ -415,6 +427,7 @@
             <p class="thank-you-name" id="thankYouName"></p>
             <p class="thank-you-count" id="thankYouCount"></p>
             <p class="thank-note">Anıların için çok teşekkürler 💛</p>
+            <button class="upload-again-btn" onclick="resetForm()">+ Tekrar yükle</button>
         </div>
     </div>
 
@@ -619,6 +632,20 @@
                 `${count} ${count === 1 ? 'dosya' : 'fotoğraf ve video'} başarıyla paylaşıldı.`;
             document.getElementById('thankYouCard').style.display = 'block';
             launchConfetti();
+        }
+
+        function resetForm() {
+            document.getElementById('thankYouCard').style.display = 'none';
+            const form = document.getElementById('uploadForm');
+            form.style.display = 'block';
+            document.getElementById('progressContainer').style.display = 'none';
+            document.getElementById('progressFill').style.width = '0%';
+            document.getElementById('status').innerText = 'Hazırlanıyor...';
+            document.getElementById('errorSection').style.display = 'none';
+            const btn = document.querySelector('.upload-btn');
+            btn.disabled = false;
+            btn.innerText = 'Fotoğraf / Video Seç';
+            document.getElementById('guestName').disabled = false;
         }
 
         function launchConfetti() {
