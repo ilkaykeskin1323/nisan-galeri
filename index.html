@@ -508,6 +508,8 @@
             document.getElementById('sheetOverlay').classList.remove('visible');
         }
 
+        const CONCURRENCY = 3;
+
         async function startUpload(files, name) {
             const container = document.getElementById('progressContainer');
             const fill = document.getElementById('progressFill');
@@ -525,14 +527,35 @@
             nameInput.disabled = true;
             fill.style.width = '0%';
 
+            const totalBytes = files.reduce((sum, f) => sum + f.size, 0);
+            const bytesLoaded = new Array(files.length).fill(0);
+            let completedCount = 0;
             const failedFiles = [];
-            let successCount = 0;
 
-            for (let i = 0; i < files.length; i++) {
-                status.innerText = `Yükleniyor: ${i + 1} / ${files.length}`;
-                const ok = await uploadFile(files[i], name, i, files.length, fill);
-                if (ok) { successCount++; } else { failedFiles.push(files[i]); }
+            function updateProgress() {
+                const loaded = bytesLoaded.reduce((a, b) => a + b, 0);
+                const pct = totalBytes > 0 ? Math.round((loaded / totalBytes) * 100) : 0;
+                fill.style.width = pct + '%';
             }
+
+            const queue = files.map((file, idx) => ({ file, idx }));
+
+            async function worker() {
+                while (queue.length > 0) {
+                    const { file, idx } = queue.shift();
+                    const ok = await uploadFile(file, name, (loaded) => {
+                        bytesLoaded[idx] = loaded;
+                        updateProgress();
+                    });
+                    completedCount++;
+                    status.innerText = `${completedCount} / ${files.length} tamamlandı`;
+                    if (!ok) failedFiles.push(file);
+                }
+            }
+
+            await Promise.all(
+                Array.from({ length: Math.min(CONCURRENCY, files.length) }, worker)
+            );
 
             isUploading = false;
             warning.classList.remove('visible');
@@ -542,16 +565,14 @@
                 btn.disabled = false;
                 btn.innerText = 'Fotoğraf / Video Seç';
                 nameInput.disabled = false;
-                fill.style.width = `${Math.round((successCount / files.length) * 100)}%`;
-                status.innerText = `${successCount} / ${files.length} dosya yüklendi.`;
-                showErrors(failedFiles, name, successCount, files.length);
+                showErrors(failedFiles, name, completedCount - failedFiles.length, files.length);
             } else {
                 fill.style.width = '100%';
-                showThankYou(name, successCount);
+                showThankYou(name, files.length);
             }
         }
 
-        async function uploadFile(file, name, index, total, fill) {
+        async function uploadFile(file, name, onProgress) {
             const formData = new FormData();
             formData.append('file', file);
             formData.append('upload_preset', UPLOAD_PRESET);
@@ -562,9 +583,7 @@
                 const xhr = new XMLHttpRequest();
                 xhr.open('POST', `https://api.cloudinary.com/v1_1/${CLOUD_NAME}/upload`, true);
                 xhr.upload.onprogress = (e) => {
-                    const fp = Math.round((e.loaded / e.total) * 100);
-                    const overall = Math.round(((index + fp / 100) / total) * 100);
-                    fill.style.width = overall + '%';
+                    if (e.lengthComputable) onProgress(e.loaded);
                 };
                 await new Promise((resolve, reject) => {
                     xhr.onload = () => xhr.status === 200 ? resolve() : reject();
@@ -604,7 +623,10 @@
             btn.disabled = true;
             btn.innerText = 'Yükleniyor...';
 
-            const ok = await uploadFile(file, _retryName, 0, 1, fill);
+            const ok = await uploadFile(file, _retryName, (loaded) => {
+                const pct = file.size > 0 ? Math.round((loaded / file.size) * 100) : 0;
+                fill.style.width = pct + '%';
+            });
 
             if (ok) {
                 _successCount++;
